@@ -24,6 +24,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', authenticator.login({ scopes: ['openid', 'profile'] }));
+app.get('/redirect', authenticator.getAccessToken());
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard');
+});
 
 
 // catch 404 and forward to error handler
