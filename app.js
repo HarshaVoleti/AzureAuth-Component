@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var app = express();
+const session = require('express-session');
 
 const AzureAuthentication = require('./component/AzureAuth')
 
@@ -23,17 +24,23 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/login', authenticator.login({ scopes: ['openid', 'profile'] }));
+app.get('/login', authenticator.login({ scopes: ['openid', 'profile', 'user.read'] }));
 app.get('/redirect', authenticator.getAccessToken());
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard',(req, res, next) =>  {
   res.render('dashboard');
 });
+app.get('/logout', authenticator.logout());
 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+app.use(session({
+  secret: 'expresskey',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -44,6 +51,10 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+app.listen(4000, () => {
+  console.log('Server is running on port 4000');
 });
 
 module.exports = app;
