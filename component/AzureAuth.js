@@ -16,7 +16,7 @@ class AzureAuthentication{
     login(configs){
         console.log("login button clicked");
         return async (req, res, next) => {
-            console.log("login initiated");
+            // console.log("login initiated");
             try{
                 console.log("entered try block");
                 const authConfigs ={
@@ -27,17 +27,17 @@ class AzureAuthentication{
                     }
                 }
                 const authInstance = new msal.ConfidentialClientApplication(authConfigs);
-                if(req.session.tokencache){
-                    authInstance.getTokenCache().deserialize(req.session.tokencache);
-                }
+                // if(req.session.tokencache){
+                //     authInstance.getTokenCache().deserialize(req.session.tokencache);
+                // }
 
-                console.log("auth instance created", authInstance);
+                // console.log("auth instance created", authInstance);
                 const response = await authInstance.getAuthCodeUrl({
                     scopes : ['openid', 'profile', 'user.read'],
                     redirectUri : this.redirectURI, 
                 })
-                console.log("response recieved", response);
-                console.log(response);
+                // console.log("response recieved", response);
+                // console.log(response);
                 res.redirect(response);
 
 
@@ -50,11 +50,11 @@ class AzureAuthentication{
     }
     
     getAccessToken(){
-        console.log("handle redirect triggered");
+        // console.log("handle redirect triggered");
         return async (req, res, next)=> {
-            console.log("handle redirect initiated");
+            // console.log("handle redirect initiated");
             try {
-                console.log("try block entered");
+                // console.log("try block entered");
                 const authInstance = new msal.ConfidentialClientApplication({
                     auth : {
                         clientId : this.clientID,
@@ -62,17 +62,41 @@ class AzureAuthentication{
                         clientSecret : this.clientsecret,
                     },
                 });
-                console.log("instance created again:" ,authInstance);
+                // console.log("instance created again:" ,authInstance);
                 const response = authInstance.acquireTokenByCode({
                     code : req.query.code,
                     redirectUri : this.redirectURI, 
                     scopes: ['openid', 'profile', 'user.read'], 
+                }).then(function(result){
+                    console.log("response recieved:", result);
                 })
-                console.log("response recieved:", response);
+                
 
 
                 const accessToken = response.accessToken;
                 if(accessToken != null){console.log("accessToken is aquired successfully");}
+
+                const headers = {
+                    Authorization: `Bearer ${accessToken}`,
+                };
+                
+
+                // try{
+
+                //     // console.log("accessToken Aquired", accessToken);
+                //     const userResponse = await axios.get('https://graph.microsoft.com/v1.0/me',headers);
+                
+                //     const userData = userResponse.data;
+                //     // console.log("userData Aquired", userData);
+                //     const userEmail = userData.mail || userData.userPrincipalName;
+                //     // console.log("useremail Aquired", userEmail);
+                //     // const user = req.session.account?.username;
+                //     // console.log("trail to get user details " );
+                //   }
+                //   catch(error){
+                //     next(error, "hello this is an error");
+                //     console.log("error occured" , error);
+                //   }
                 res.redirect('/dashboard');
             }catch(error){
                 console.log(error);
