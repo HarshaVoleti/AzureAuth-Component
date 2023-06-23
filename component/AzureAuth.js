@@ -36,7 +36,7 @@ class AzureAuthentication{
                     scopes : ['openid', 'profile', 'user.read'],
                     redirectUri : this.redirectURI, 
                 })
-                // console.log("response recieved", response);
+                console.log("response recieved", response);
                 // console.log(response);
                 res.redirect(response);
 
@@ -67,36 +67,41 @@ class AzureAuthentication{
                     code : req.query.code,
                     redirectUri : this.redirectURI, 
                     scopes: ['openid', 'profile', 'user.read'], 
-                }).then(function(result){
+                }).then(async function(result){
                     console.log("response recieved:", result);
+                    const accessToken = result.accessToken;
+                    if(accessToken != null){
+                        console.log("accessToken is aquired successfully", accessToken);
+                    }
+                    const headers = {
+                        Authorization: `Bearer ${accessToken}`,
+                    };
+                    
+    
+                    try{
+    
+                        console.log("accessToken Aquired", accessToken);
+                        const userResponse = await axios.get('https://graph.microsoft.com/v1.0/me', headers);
+                    
+                        const userData = userResponse.data;
+                        console.log("userData Aquired", userData);
+                        const userEmail = userData.mail || userData.userPrincipalName;
+                        console.log("useremail Aquired", userEmail);
+                        const user = req.session.account?.username;
+                        console.log("trail to get user details " );
+                      }
+                      catch(error){
+                        next(error, "hello this is an error");
+                        console.log("error occured" , error);
+                      }
                 })
                 
 
 
-                const accessToken = response.accessToken;
-                if(accessToken != null){console.log("accessToken is aquired successfully");}
-
-                const headers = {
-                    Authorization: `Bearer ${accessToken}`,
-                };
+                
                 
 
-                // try{
-
-                //     // console.log("accessToken Aquired", accessToken);
-                //     const userResponse = await axios.get('https://graph.microsoft.com/v1.0/me',headers);
-                
-                //     const userData = userResponse.data;
-                //     // console.log("userData Aquired", userData);
-                //     const userEmail = userData.mail || userData.userPrincipalName;
-                //     // console.log("useremail Aquired", userEmail);
-                //     // const user = req.session.account?.username;
-                //     // console.log("trail to get user details " );
-                //   }
-                //   catch(error){
-                //     next(error, "hello this is an error");
-                //     console.log("error occured" , error);
-                //   }
+               
                 res.redirect('/dashboard');
             }catch(error){
                 console.log(error);
