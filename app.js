@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 
 app.get('/login', authenticator.login({ scopes: ['openid', 'profile', 'user.read'] }));
 app.get('/redirect', authenticator.getAccessToken());
+// app.get('/getData', authenticator.getUserData());
 app.get('/dashboard',(req, res, next) =>  {
   res.render('dashboard');
 });
