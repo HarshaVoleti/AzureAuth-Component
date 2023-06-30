@@ -5,13 +5,22 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var app = express();
 const session = require('express-session');
+require('dotenv').config({ path: './.env' });
 
 const AzureAuthentication = require('./component/AzureAuth')
 
 // view engine setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
+app.use(session({
+  secret: process.env.EXPRESS_SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+}
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,8 +36,11 @@ app.get('/', (req, res) => {
 app.get('/login', authenticator.login({ scopes: ['openid', 'profile', 'user.read'] }));
 app.get('/redirect', authenticator.getAccessToken());
 // app.get('/getData', authenticator.getUserData());
-app.get('/dashboard',(req, res, next) =>  {
-  res.render('dashboard');
+app.get('/dashboard', (req, res, next) => {
+  const accessToken = req.session.accessToken;
+  const name = req.session.name;
+  const email = req.session.email;
+  res.render('dashboard', { accessToken , name, email });
 });
 app.get('/logout', authenticator.logout());
 
@@ -37,11 +49,7 @@ app.get('/logout', authenticator.logout());
 app.use(function(req, res, next) {
   next(createError(404));
 });
-app.use(session({
-  secret: 'expresskey',
-  resave: false,
-  saveUninitialized: true
-}));
+
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -54,8 +62,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(4000, () => {
-  console.log('Server is running on port 4000');
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
 
 module.exports = app;

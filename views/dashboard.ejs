@@ -5,7 +5,22 @@
   <title>Dashboard Example</title>
 </head>
 <body>
-  <h1>Hello logged in User</h1>
+  <h1>Hello logged in User <%= name %></h1>
+
+  <button onclick="showUserDetails()">Show User Details</button>
+  <p id="accessToken" style="display: none;"> Access token is <%= accessToken %></p>
+
+
+  <script>
+    function showUserDetails() {
+      const name = "<%= name %>";
+      const email = "<%= email %>";
+      const accessToken = "<%= accessToken %>";
+
+      const message = `Name: ${name}\nEmail: ${email}\nAccess Token: ${accessToken}`;
+      alert(message);
+    }
+  </script>
 
   <a href="/logout">Logout</a>
   

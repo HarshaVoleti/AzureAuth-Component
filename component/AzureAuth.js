@@ -14,7 +14,7 @@ function logToFile(message) {
         console.error('Error appending to log file:', err);
       }
     });
-  }
+}
 
 class AzureAuthentication{
 
@@ -24,7 +24,7 @@ class AzureAuthentication{
     redirectURI = process.env.REDIRECT_URI;
     clientsecret = process.env.CLIENT_SECRET;
     logoutredirecturl = process.env.POST_LOGOUT_REDIRECT_URI;
-    
+    at = "";
       
 
    
@@ -78,6 +78,27 @@ class AzureAuthentication{
 
         }
     }
+
+    async getAccessTokenFromCache(req) {
+        try {
+          // Check if accessToken exists in the session cache
+          const accessToken = req.session.accessToken;
+          if (accessToken) {
+            console.log('Existing accessToken found in cache:', accessToken);
+            logToFile(`Existing accessToken found in cache: ${accessToken}`);
+            return accessToken;
+          }
+    
+          // If accessToken doesn't exist in cache, return null or handle the case accordingly
+          console.log('No accessToken found in cache');
+          logToFile('No accessToken found in cache');
+          return null;
+        } catch (error) {
+          console.log(error);
+          logToFile(error);
+          throw error;
+        }
+    }
     
     getAccessToken(){
         // console.log("handle redirect triggered");
@@ -106,7 +127,7 @@ class AzureAuthentication{
                 let name = "";
                 let email = "";
                 console.log("this is req.query object: ", req.query);
-                logToFile("this is req.query object: ", req.query)
+                logToFile(`this is req.query object: ${req.query}`)
                 // console.log("instance created again:" ,authInstance);
                 const tokenData = authInstance.acquireTokenByCode({
                     code : req.query.code,
@@ -116,16 +137,23 @@ class AzureAuthentication{
                     console.log("response recieved:", result);
                     logToFile(` response recieved : ${result}`);
                     accessToken = result.accessToken;
+                    // at = accessToken;
                     name = result.idTokenClaims.name;
                     email = result.idTokenClaims.preferred_username;
                     console.log("name:", name );
                     logToFile(`name: ${name}`)
                     console.log("emailID : ", email);
+                    // console.log("at is" ,this.at);
                     logToFile(`email ID : ${email}`);
                     if(accessToken != null){
                         console.log("accessToken is aquired successfully :", accessToken);
                         logToFile(`accessToken is aquired successfully : ${accessToken}`)
+                        req.session.accessToken = accessToken;
+                        req.session.name = name;
+                        req.session.email = email;
+                        console.log( "access token stored in session",req.session.accessToken);
                     }
+                    
                     // res.session.toKenData = result;
 
                     res.redirect('/dashboard');
