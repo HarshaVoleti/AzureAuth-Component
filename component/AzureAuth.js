@@ -28,7 +28,7 @@ class AzureAuthentication{
     login(){
         console.log("login button clicked");
         return async (req, res, next) => {
-            // console.log("login initiated");
+            
             try{
                 console.log("entered try block");
                 logToFile("entered try block")
@@ -50,9 +50,6 @@ class AzureAuthentication{
                     }
                 }
                 const authInstance = new msal.ConfidentialClientApplication(authConfigs);
-                // if(req.session.tokencache){
-                //     authInstance.getTokenCache().deserialize(req.session.tokencache);
-                // }
 
                 console.log("auth instance created", authInstance);
                 logToFile(`auth instance created : ${authInstance}`);
@@ -62,7 +59,7 @@ class AzureAuthentication{
                 })
                 console.log("response recieved", response);
                 logToFile(`response recieved : ${response}`)
-                // console.log(response);
+
                 res.redirect(response );
 
 
@@ -97,11 +94,11 @@ class AzureAuthentication{
     }
     
     getAccessToken(){
-        // console.log("handle redirect triggered");
+
         return async (req, res, next)=> {
-            // console.log("handle redirect initiated");
+
             try {
-                // console.log("try block entered");
+                
                 const authInstance = new msal.ConfidentialClientApplication({
                     auth : {
                         clientId : this.clientID,
@@ -125,7 +122,7 @@ class AzureAuthentication{
                 console.log("this is req.query object: ", req.query);
                 logToFile(`this is req.query object: ${req.query}`)
                 logToFile("this is req.query object: ", req.query)
-                // console.log("instance created again:" ,authInstance);
+
                 const tokenData = authInstance.acquireTokenByCode({
                     code : req.query.code,
                     redirectUri : this.redirectURI, 
@@ -134,13 +131,13 @@ class AzureAuthentication{
                     console.log("response recieved:", result);
                     logToFile(` response recieved : ${result}`);
                     accessToken = result.accessToken;
-                    // at = accessToken;
+
                     name = result.idTokenClaims.name;
                     email = result.idTokenClaims.preferred_username;
                     console.log("name:", name );
                     logToFile(`name: ${name}`)
                     console.log("emailID : ", email);
-                    // console.log("at is" ,this.at);
+
                     logToFile(`email ID : ${email}`);
                     if(accessToken != null){
                         console.log("accessToken is aquired successfully :", accessToken);
@@ -151,7 +148,7 @@ class AzureAuthentication{
                         console.log( "access token stored in session",req.session.accessToken);
                     }
                     
-                    // res.session.toKenData = result;
+
 
                     res.redirect('/dashboard');
                     
@@ -183,9 +180,9 @@ class AzureAuthentication{
                 }
                 console.log('logout added with logoutredirect',logouturi);
                 logToFile(` logout added with logoutredirect : ${logouturi}`)
-                // req.session.destroy(() => {
+
                     res.redirect(logouturi);
-                // });
+
             }catch(error){
                 next(error);
                 console.log(error);
