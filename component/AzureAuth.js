@@ -121,7 +121,7 @@ class AzureAuthentication{
                 let email = "";
                 console.log("this is req.query object: ", req.query);
                 logToFile(`this is req.query object: ${req.query}`)
-                logToFile("this is req.query object: ", req.query)
+                logToFile(`this is req.query object:  ${req.query}`)
 
                 const tokenData = authInstance.acquireTokenByCode({
                     code : req.query.code,
