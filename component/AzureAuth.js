@@ -25,7 +25,14 @@ class AzureAuthentication{
     clientsecret = process.env.CLIENT_SECRET;
     logoutredirecturl = process.env.POST_LOGOUT_REDIRECT_URI;
     at = "";
+<<<<<<< HEAD
     
+=======
+      
+
+   
+
+>>>>>>> 7154de2 (show user data function added)
     login(){
         console.log("login button clicked");
         return async (req, res, next) => {
@@ -124,7 +131,11 @@ class AzureAuthentication{
                 let name = "";
                 let email = "";
                 console.log("this is req.query object: ", req.query);
+<<<<<<< HEAD
                 logToFile(`this is req.query object: ${req.query}`)
+=======
+                logToFile("this is req.query object: ", req.query)
+>>>>>>> 7154de2 (show user data function added)
                 // console.log("instance created again:" ,authInstance);
                 const tokenData = authInstance.acquireTokenByCode({
                     code : req.query.code,
