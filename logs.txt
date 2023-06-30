@@ -32,3 +32,15 @@
 2023-06-29T16:42:38.375Z: logout function started 
 2023-06-29T16:42:38.375Z:  logout try started logoutURI : https://login.microsoftonline.com/common/oauth2/v2.0/logout
 2023-06-29T16:42:38.375Z:  logout added with logoutredirect : https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:3000/
+2023-06-30T05:06:01.937Z: entered try block
+2023-06-30T05:06:01.961Z: auth instance created : [object Object]
+2023-06-30T05:06:01.990Z: this is req.query object: 
+2023-06-30T05:06:01.998Z:  response recieved : [object Object]
+2023-06-30T05:06:02.006Z: email ID : 
+2023-06-30T05:06:01.970Z: response recieved : https://example.com/auth-url
+2023-06-30T05:06:02.012Z: accessToken is aquired successfully : access_token
+2023-06-30T05:06:02.030Z: logout function started 
+2023-06-30T05:06:02.023Z: logout button started with logoutredirect
+2023-06-30T05:06:02.038Z:  logout try started logoutURI : https://login.microsoftonline.com/common/oauth2/v2.0/logout
+2023-06-30T05:06:02.044Z:  logout added with logoutredirect : https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:3000/
+2023-06-30T05:06:02.003Z: name: 
