@@ -24,10 +24,13 @@ class AzureAuthentication{
     redirectURI = process.env.REDIRECT_URI;
     clientsecret = process.env.CLIENT_SECRET;
     logoutredirecturl = process.env.POST_LOGOUT_REDIRECT_URI;
+<<<<<<< HEAD
     at = "";
 <<<<<<< HEAD
     
 =======
+=======
+>>>>>>> 31a09e8 (nothing)
       
 
    
