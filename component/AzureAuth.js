@@ -25,10 +25,7 @@ class AzureAuthentication{
     clientsecret = process.env.CLIENT_SECRET;
     logoutredirecturl = process.env.POST_LOGOUT_REDIRECT_URI;
     at = "";
-      
-
-   
-
+    
     login(){
         console.log("login button clicked");
         return async (req, res, next) => {
@@ -169,24 +166,6 @@ class AzureAuthentication{
             }
         }
     }
-
-    // getUserData(){
-    //     return async( req, res, next)=>{
-    //         try{
-    //             let result = res.session.toKenData;
-    //             console.log("response recieved:", result);
-    //                 accessToken = result.accessToken;
-    //                 name = result.idTokenClaims.name;
-    //                 email = result.idTokenClaims.preferred_username;
-    //                 console.log("name:", name );
-    //                 console.log("emailID : ", email);
-
-    //         }catch(error){
-    //             next(error);
-    //             console.log("error occured : ", error);
-    //         }
-    //     }
-    // }
 
     logout(){
         console.log('logout button started with logoutredirect');
